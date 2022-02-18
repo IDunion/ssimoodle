@@ -14,7 +14,7 @@ How to run the programm.
 ### Docker
 
 1. Clone repository
-2. Go to VC_API/src
+2. Go to VC_API/
 3. Run
 
 ```console
