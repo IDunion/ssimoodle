@@ -1,19 +1,15 @@
 import logging
-import logging.config
-from datetime import date
-# Format
-format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+from logging.handlers import TimedRotatingFileHandler
 
-# Set file logger
-filename = f"app.{date.today().isoformat()}.log"
-logging.basicConfig(filename=filename, filemode='a', format=format)
+_handler = TimedRotatingFileHandler("app.log", when="midnight", interval=1)
+_handler.suffix = "%Y%m%d"
 
-# create logger
-logger = logging.getLogger('vc')
-logger.setLevel(logging.DEBUG)
-
-# create console handler and add to logger
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-ch.setFormatter(logging.Formatter(format))
-logger.addHandler(ch)
+# config logger
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        _handler,
+        logging.StreamHandler()
+    ]
+)

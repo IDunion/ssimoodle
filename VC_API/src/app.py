@@ -1,9 +1,9 @@
 from server.server import Server
 from database.database import Database
-from server.logger import logger
+from server.logger import logging
 
 if __name__  == "__main__":
-    logger.info("Starting server...")
+    logging.info("Starting server...")
     Database.run()
     server = Server()
     server.run()
