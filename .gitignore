@@ -146,3 +146,4 @@ cython_debug/
 
 # Costum - For local run
 VC_API/src/Database/sqlalchemy.db
+VC_API/app.log.*
