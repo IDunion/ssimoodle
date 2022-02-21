@@ -3,7 +3,7 @@ from database.entities.agent import Agent
 from database.setup import Setup
 
 class AgentHandler():
-    def add(agent):
+    def add(agent) -> int:
         """Creates and stores a new agent
 
         Args:
@@ -18,7 +18,10 @@ class AgentHandler():
         Setup.SQL_Session.commit()
         return agent.id
     
-    def get(id):
+    def update():
+        Setup.SQL_Session.commit()
+
+    def get(id) -> Agent:
         """Gets an agent by id
 
         Args:
@@ -29,7 +32,7 @@ class AgentHandler():
         """
         return Setup.SQL_Session.query(Agent).filter(Agent.id == id).first()
 
-    def getAll():
+    def getAll() -> list:
         """Gets all agents
 
         Returns:

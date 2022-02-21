@@ -35,7 +35,9 @@ def add_agent():
 
     agent = Agent()
     agent.name = name
-    agent.configJson = str(data)
+    agent.url = data["url"]
+    agent.api_token = data["token"]
+    agent.vc_type = data["type"]
 
     id = AgentHandler.add(agent)
 

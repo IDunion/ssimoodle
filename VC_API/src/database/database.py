@@ -6,6 +6,7 @@ from globalSettings import Settings
 
 from database.entities.agent import Agent
 from database.entities.credential import Credential
+from database.entities.credential_issuing_data import CredentialIssuingData 
 
 class Database:
     def run():

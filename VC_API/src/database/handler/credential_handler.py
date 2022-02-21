@@ -1,9 +1,9 @@
 from datetime import datetime 
-from database.entities.credential import Credential, Status
+from database.entities.credential import Credential, State
 from database.setup import Setup
 
 class CredentialHandler():
-    def add(credential):
+    def add(credential) -> int:
         """Creates and stores a new credential
 
         Args:
@@ -13,13 +13,16 @@ class CredentialHandler():
             int: The id of the credential
         """
         credential.creationDate = datetime.now()
-        credential.status = Status.Created.value
+        credential.state = State.Created.value
 
         Setup.SQL_Session.add(credential)
         Setup.SQL_Session.commit()
         return credential.id
+
+    def update():
+        Setup.SQL_Session.commit()
     
-    def get(id):
+    def get(id) -> Credential:
         """Gets a credential by id
         
         Args:
@@ -30,7 +33,7 @@ class CredentialHandler():
         """
         return Setup.SQL_Session.query(Credential).filter(Credential.id == id).first()
 
-    def getByCourseId(courseID):
+    def getByCourseId(courseID) -> list:
         """Returns all credential by the given course id
 
         Args:
