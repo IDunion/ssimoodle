@@ -41,14 +41,14 @@ class Server:
         def decorated(*args, **kwargs):
             r = f(*args, **kwargs)
             if not r:
-                return Response("{}", content_type='text/json; charset=utf-8')
+                return Response("{}", content_type='application/json; charset=utf-8')
 
             if type(r) == list:
                 response = json.dumps([json.loads(Server.to_json_str(object)) for object in r])
-                return Response(response, content_type='text/json; charset=utf-8')
+                return Response(response, content_type='application/json; charset=utf-8')
             else:
                 response = Server.to_json_str(r)
-                return Response(response, content_type='text/json; charset=utf-8')
+                return Response(response, content_type='application/json; charset=utf-8')
 
         return decorated    
 
@@ -59,7 +59,7 @@ class Server:
         def decorated(*args, **kwargs):
             content_type = request.headers.get('Content-Type')
             if (content_type != 'application/json'):
-                return 'Content-Type not supported!', 415
+                return 'Content-Type not supported! Requires application/json', 415
             else:
                 return f(*args, **kwargs)
 
