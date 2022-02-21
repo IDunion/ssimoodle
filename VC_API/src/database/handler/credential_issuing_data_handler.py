@@ -4,13 +4,13 @@ from database.setup import Setup
 
 class CredentialIssuingDataHandler():
     def add(credentialIssiungData) -> int:
-        """Creates and stores a new credential
+        """Creates and stores a new credentialIssuingData
 
         Args:
-            credential (Database.Entities.Credential): Credential which will be stored
+            credentialIssuingData (Database.Entities.CredentialIssuingData): CredentialIssuingData which will be stored
 
         Returns:
-            int: The id of the credential
+            int: The id of the CredentialIssuingData
         """
         credentialIssiungData.creationDate = datetime.now()
 
@@ -22,13 +22,13 @@ class CredentialIssuingDataHandler():
         Setup.SQL_Session.commit()
     
     def get(id) -> CredentialIssuingData:
-        """Gets a credential by id
+        """Gets a CredentialIssuingData by id
         
         Args:
-            id (int): credential id
+            id (int): credentialIssuingData id
 
         Returns:
-            Database.Entities.Credential: The credential
+            Database.Entities.CredentialIssuingData: The credentialIssuingData
         """
         return Setup.SQL_Session.query(CredentialIssuingData).filter(CredentialIssuingData.id == id).first()
 
@@ -40,7 +40,7 @@ class CredentialIssuingDataHandler():
             agentId (int): The agent Id
 
         Returns:
-            Database.Entities.Credential: The credentialIssuingData
+            Database.Entities.CredentialIssuingData: The credentialIssuingData
         """
         return Setup.SQL_Session.query(CredentialIssuingData).filter(
             CredentialIssuingData.credential_id == credentialId and CredentialIssuingData.agent_id == agentId

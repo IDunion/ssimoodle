@@ -4,8 +4,8 @@ import requests as http_client
 from flask import request
 
 from server.server import Server
-from database.entities.credential import Credential, State
-from database.entities.credential_issuing_data import CredentialIssuingData
+from database.entities.credential import Credential
+from database.entities.credential_issuing_data import CredentialIssuingData, State
 
 from database.handler.credential_handler import CredentialHandler
 from database.handler.agent_handler import AgentHandler
@@ -66,8 +66,11 @@ def issue_credential():
     try:
         response = http_client.request("POST", url, headers=headers, data=body)
         if response.status_code == 200:
-            credential.state = State.Issuing.value
-            CredentialHandler.update()
+            credentialIssiungData = CredentialIssuingData()
+            credentialIssiungData.credential_id = id
+            credentialIssiungData.agent_id = agentId
+            credentialIssiungData.state = State.Issuing.value
+            CredentialIssuingDataHandler.add(credentialIssiungData)
 
             return str(True)
         else:
@@ -92,14 +95,13 @@ def issuingresponse_credential():
     credential = CredentialHandler.get(id)
     credential.state = State.Issued.value
 
-    credentialIssiungData = CredentialIssuingData()
-    credentialIssiungData.credential_id = id
-    credentialIssiungData.agent_id = agentId
+    credentialIssiungData = CredentialIssuingDataHandler.getByCredentialAndAgent(id, agentId)
+    credentialIssiungData.state = State.Issued.value
     credentialIssiungData.data = json.dumps(data)
-    CredentialIssuingDataHandler.add(credentialIssiungData)
+    CredentialIssuingDataHandler.update()
 
     return str(True)
-    
+
 # Revoke a credential
 @Server.app.route('/credential/revoke', methods=['Post'])
 @Server.token_required
@@ -107,7 +109,6 @@ def revoke_credential():
     credentialId = request.args["credentialId"]
     agentId = request.args["agentId"]
 
-    credential = CredentialHandler.get(credentialId)
     agent = AgentHandler.get(agentId)
     credentialIssuingData = CredentialIssuingDataHandler.getByCredentialAndAgent(credentialId, agentId)
 
@@ -121,8 +122,8 @@ def revoke_credential():
     try:
         response = http_client.request("POST", url, headers=headers, data=body)
         if response.status_code == 200:
-            credential.state = State.Revoked.value
-            CredentialHandler.update()
+            credentialIssuingData.state = State.Revoked.value
+            CredentialIssuingDataHandler.update()
 
             return str(True)
         else:

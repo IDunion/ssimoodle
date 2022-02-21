@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from database.setup import Setup
-from enum import Enum
 
 # Credential class
 class Credential(Setup.Base):
@@ -9,7 +8,6 @@ class Credential(Setup.Base):
     
     id = Column(Integer, primary_key=True)
     creationDate = Column(DateTime, nullable=False)
-    state = Column(Integer, nullable=False)
     
     lms_user_id = Column(String(128), nullable=False)
     lms_course_id = Column(String(128), nullable=False)
@@ -18,10 +16,3 @@ class Credential(Setup.Base):
     data = Column(String(1024), nullable=True)
 
     credential_data = relationship("CredentialIssuingData")
-
-# state enum
-class State(Enum):
-    Created = 1
-    Issuing = 2
-    Issued = 3
-    Revoked = 4
