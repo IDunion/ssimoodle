@@ -1,5 +1,5 @@
 from datetime import datetime 
-from database.entities.credential import Credential, State
+from database.entities.credential import Credential
 from database.setup import Setup
 
 class CredentialHandler():
@@ -13,7 +13,6 @@ class CredentialHandler():
             int: The id of the credential
         """
         credential.creationDate = datetime.now()
-        credential.state = State.Created.value
 
         Setup.SQL_Session.add(credential)
         Setup.SQL_Session.commit()
