@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "9912bd46-3dc6-4b75-8052-232f2a70ad6e",
+		"name": "Moodl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Agent",
+			"item": [
+				{
+					"name": "GetAgent",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:9080/agent/get?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "9080",
+							"path": [
+								"agent",
+								"get"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllAgents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9080/agent/getall",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"agent",
+								"getall"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddAgent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"url\": \"http://localhost:2345\", \"token\": \"SecretAgentToken\", \"type\": \"TC\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9080/agent/add?name=Test",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"agent",
+								"add"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Credential",
+			"item": [
+				{
+					"name": "GetCredential",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9080/credential/get?id=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"get"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCredentialByCourseId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9080/credential/getbycourseid?courseid=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"getbycourseid"
+							],
+							"query": [
+								{
+									"key": "courseid",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddCredential",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"UserId\": \"1\", \"CourseId\": \"1\" , \"IssuerId\": \"123\" , \"Data\": { \"Grade\" : 1, \"Date\" : \"2022-02-16\" }}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9080/credential/add",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IssueCredential",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9080/credential/issue?credentialId=1&agentId=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"issue"
+							],
+							"query": [
+								{
+									"key": "credentialId",
+									"value": "1"
+								},
+								{
+									"key": "agentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RevokeCredential",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:9080/credential/revoke?credentialId=1&agentId=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"revoke"
+							],
+							"query": [
+								{
+									"key": "credentialId",
+									"value": "1"
+								},
+								{
+									"key": "agentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IssueResponse",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "SecretToken",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"SSIUser\":1,\r\n    \"SSICredendial\":123,\r\n    \"RevokeData\":\"123AfW\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9080/credential/issuingresponse?credentialId=1&agentId=1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"credential",
+								"issuingresponse"
+							],
+							"query": [
+								{
+									"key": "credentialId",
+									"value": "1"
+								},
+								{
+									"key": "agentId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
