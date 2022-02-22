@@ -10,6 +10,7 @@ How to run the programm.
 
 1. Clone repository
 2. Run VC_API/src/app.py
+3. Browse http://localhost:9080/apidocs/
 
 ### Docker
 
@@ -21,3 +22,5 @@ How to run the programm.
 docker build -t vcapi .
 docker run -d -p 9080:9080 vcapi
 ```
+
+4. Browse http://localhost:9080/apidocs/

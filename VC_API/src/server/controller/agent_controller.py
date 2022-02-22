@@ -9,6 +9,40 @@ from flask import request
 @Server.token_required
 @Server.returns_json
 def get_agent():
+    """Returns an agent by id.
+    ---
+    tags:
+      - Agents
+    parameters:
+      - name: id
+        in: query 
+        type: integer
+        required: true
+        default: 1
+    definitions:
+      Agent:
+        type: object
+        properties:
+          id: 
+            type: integer
+          creationDate:
+            type: string
+          name:
+            type: string
+          url: 
+            type: string
+          api_token:
+            type: string
+          vc_type: 
+            type: string
+    security:
+      - APIKeyHeader: ['x-auth-token']
+    responses:
+      200:
+        description: The agent
+        schema:
+          $ref: '#/definitions/Agent'
+    """
     id = request.args["id"]
     agent = AgentHandler.get(id)
     return agent
@@ -18,6 +52,23 @@ def get_agent():
 @Server.token_required
 @Server.returns_json
 def getAll_agent():
+    """Returns all stored agents.
+    ---
+    tags:
+      - Agents
+    definitions:
+      AgentList:
+        type: array
+        items:
+          $ref: '#/definitions/Agent'
+    security:
+      - APIKeyHeader: ['x-auth-token']
+    responses:
+      200:
+        description: The agent list
+        schema:
+          $ref: '#/definitions/AgentList'
+    """
     agents = AgentHandler.getAll()
     return agents
 
@@ -25,6 +76,46 @@ def getAll_agent():
 @Server.app.route('/agent/add', methods=['Post'])
 @Server.token_required
 def add_agent():
+    """Stores a new agent.
+    ---
+    tags:
+      - Agents
+    parameters:
+      - name: name
+        in: query 
+        type: string
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          id: agent
+          required:
+            - url
+            - token
+            - type
+          properties:
+            url:
+              type: string
+              description: Agents url.
+              default: localhost:123
+            token:
+              type: string
+              description: Agents api token.
+              default: SecretToken
+            type:
+              type: string
+              description: Agents vc type.
+              default: VC 2.0
+    security:
+      - APIKeyHeader: ['x-auth-token']
+    responses:
+      200:
+        description: The id of the new agent.
+        schema:
+          ID: 
+            type: integer
+    """
     content_type = request.headers.get('Content-Type')
     if (content_type != 'application/json'):
         return 'Content-Type not supported!', 415

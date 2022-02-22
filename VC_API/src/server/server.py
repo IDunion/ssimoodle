@@ -1,20 +1,26 @@
 from datetime import datetime
 import json
-from flask import Flask, Response
+from flask import Flask, Response, config
 from flask import request
 from flask import jsonify
 
 from functools import wraps
 from globalSettings import Settings
 
+from flasgger import Swagger
+
 class Server:
     app = Flask(__name__)
-
+    
     # Start server
     def run(self):
         # import controller
         import server.controller.agent_controller
         import server.controller.credential_controller
+
+        # init swagger
+        swagger_template = {"securityDefinitions": {"APIKeyHeader": {"type": "apiKey", "name": "x-auth-token", "in": "header"}}}
+        Swagger(self.app, template=swagger_template)
 
         self.app.run(host=Settings.serverAddress, port=Settings.serverPort)
 
@@ -75,5 +81,5 @@ class Server:
     ##### Controler #####
     # Simple status controler
     @app.route('/', methods=['GET'])
-    def home(): 
+    def home():
         return "<h1>Online</h1>"
