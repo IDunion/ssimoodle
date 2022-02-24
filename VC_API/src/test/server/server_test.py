@@ -1,4 +1,3 @@
-from email import header
 import os, sys;
 from pathlib import Path
 path = Path(os.path.realpath(__file__))
@@ -7,7 +6,6 @@ sys.path.append(os.path.dirname(src))
 sys.path.append(os.path.join(os.path.dirname(src), "src"))
 
 import unittest
-from unittest import mock 
 from datetime import datetime
 
 from server.server import Server
