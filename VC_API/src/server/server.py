@@ -1,13 +1,10 @@
-from datetime import datetime
 import json
-from flask import Flask, Response, config
-from flask import request
-from flask import jsonify
-
-from functools import wraps
-from globalSettings import Settings
-
+from datetime import datetime
+from flask import Flask, Response, request, jsonify
 from flasgger import Swagger
+from functools import wraps
+
+from globalSettings import Settings
 
 class Server:
     app = Flask(__name__)
