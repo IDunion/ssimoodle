@@ -75,6 +75,7 @@ def getAll_agent():
 # Stores a new agent
 @Server.app.route('/agent/add', methods=['Post'])
 @Server.token_required
+@Server.contentType_json
 def add_agent():
     """Stores a new agent.
     ---
@@ -116,11 +117,6 @@ def add_agent():
           ID: 
             type: integer
     """
-    content_type = request.headers.get('Content-Type')
-    if (content_type != 'application/json'):
-        return 'Content-Type not supported!', 415
-
-    # id = request.args["id"]
     name = request.args["name"]
     data = request.json
 

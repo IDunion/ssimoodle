@@ -2,6 +2,7 @@ import json
 import logging
 import requests as http_client
 from flask import request
+import responses
 
 from server.server import Server
 from database.entities.credential import Credential
@@ -154,6 +155,7 @@ def add_credential():
 # Issue a credential
 @Server.app.route('/credential/issue', methods=['Post'])
 @Server.token_required
+@responses.activate
 def issue_credential():
     """Starts the issuing process by calling the agent.
     ---
@@ -186,7 +188,7 @@ def issue_credential():
     agent = AgentHandler.get(agentId)
 
     # Issuing
-    url = agent.url + "/Issuing"
+    url = agent.url + "/Issue"
     headers = {
         'x-auth-token': agent.api_token
         }
@@ -257,9 +259,6 @@ def issuingresponse_credential():
     
     data = request.json
 
-    credential = CredentialHandler.get(id)
-    credential.state = State.Issued.value
-
     credentialIssiungData = CredentialIssuingDataHandler.getByCredentialAndAgent(id, agentId)
     credentialIssiungData.state = State.Issued.value
     credentialIssiungData.data = json.dumps(data)
@@ -270,6 +269,7 @@ def issuingresponse_credential():
 # Revoke a credential
 @Server.app.route('/credential/revoke', methods=['Post'])
 @Server.token_required
+@responses.activate
 def revoke_credential():
     """Starts the revocation process by calling the agent.
     ---

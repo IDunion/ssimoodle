@@ -3,3 +3,4 @@ SQLAlchemy==1.4.31
 requests==2.26.0
 flasgger==0.9.5
 alchemy-mock==0.4.3
+responses==0.18.0
