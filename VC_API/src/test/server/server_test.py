@@ -12,7 +12,6 @@ from server.server import Server
 from database.entities.agent import Agent
 from database.entities.credential import Credential
 
-
 class ServerTest(unittest.TestCase):
 
     ##### test methode to_json_str #####

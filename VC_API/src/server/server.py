@@ -4,7 +4,7 @@ from flask import Flask, Response, request, jsonify
 from flasgger import Swagger
 from functools import wraps
 
-from globalSettings import Settings
+from global_settings import Settings
 
 class Server:
     app = Flask(__name__)

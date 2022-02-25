@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from database.setup import Setup
-from globalSettings import Settings
+from global_settings import Settings
 
 from database.entities.agent import Agent
 from database.entities.credential import Credential

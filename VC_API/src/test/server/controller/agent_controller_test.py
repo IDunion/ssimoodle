@@ -14,7 +14,7 @@ from alchemy_mock.mocking import UnifiedAlchemyMagicMock
 # import controller
 import server.controller.agent_controller
 
-from globalSettings import Settings
+from global_settings import Settings
 from server.server import Server
 from database.setup import Setup
 
