@@ -24,7 +24,7 @@ class CredentialHandlerTest(unittest.TestCase):
         res = CredentialHandler.add(credential)
 
         self.assertEqual(res, 1, "Expected 1!")
-        self.assertNotEqual(credential.creationDate, None, "Expected not null")
+        self.assertNotEqual(credential.creation_date, None, "Expected not null")
 
     ##### test methode get #####
     def test_get_return_credential(self):
@@ -35,14 +35,15 @@ class CredentialHandlerTest(unittest.TestCase):
 
         self.assertEqual(res.id, 1, "Expected 1!")
 
-    ##### test methode getall #####
+    ##### test methode getlist #####
     def test_getAll_return_list(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, lms_course_id=1))
-        Setup.SQL_Session.add(Credential(id=2, lms_course_id=1))
-        Setup.SQL_Session.add(Credential(id=3, lms_course_id=1))
+        Setup.SQL_Session.add(Credential(id=1, course_id=1))
+        Setup.SQL_Session.add(Credential(id=2, course_id=1))
+        Setup.SQL_Session.add(Credential(id=3, course_id=1))
         
-        res = CredentialHandler.getByCourseId(1)
+        query = {}
+        res = CredentialHandler.getlist(query)
 
         self.assertEqual(len(res), 3, "Expected 3!")
 

@@ -39,7 +39,7 @@ class CredentialControllerTest(unittest.TestCase):
 
     def test_get_agent_returns_agent(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, lms_user_id="1"))
+        Setup.SQL_Session.add(Credential(id=1, user_id="1"))
 
         res = Server.app.test_client().get(
             '/credential/get?id=1',
@@ -47,24 +47,25 @@ class CredentialControllerTest(unittest.TestCase):
         )
 
         self.assertEqual(res.status_code, 200, "Expected 200!")
-        self.assertEqual(json.loads(res.data.decode("utf-8"))["lms_user_id"], "1", "Expected  {}!")
+        self.assertEqual(json.loads(res.data.decode("utf-8"))["user_id"], "1", "Expected  {}!")
 
-    ##### test route agent/getbycourseid #####
+    ##### test route agent/getlist #####
     def test_getbycourseid_returns_credentialList(self):
+        query = {'course_id' : '1'}
         Setup.SQL_Session = UnifiedAlchemyMagicMock(data=[
             (
             [mock.call.query(Credential),
-            mock.call.filter(Credential.lms_course_id == "1")],
-            [Credential(id=1, lms_course_id="1"), Credential(id=2, lms_course_id="1")]
+            mock.call.filter_by(**query)],
+            [Credential(id=1, course_id="1"), Credential(id=2, course_id="1")]
         )])        
 
         res = Server.app.test_client().get(
-            '/credential/getbycourseid?courseid=1',
+            '/credential/getlist?course_id=1',
             headers={'x-auth-token': Settings.authToken}
         )
 
         self.assertEqual(res.status_code, 200, "Expected 200!")
-        self.assertEqual(len(json.loads(res.data.decode("utf-8"))), 2, "Expected 2 credentias!")
+        self.assertEqual(len(json.loads(res.data.decode("utf-8"))), 2, "Expected 2 credentials!")
 
     #### test route agent/add #####
     def test_add_agent_returns_ok(self):
@@ -93,7 +94,7 @@ class CredentialControllerTest(unittest.TestCase):
     #### test route credential/issue #####
     def test_issue_returns_true(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, lms_user_id="1", data='{"Test":"Test"}'))
+        Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
         Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
 
         responses.add(responses.POST, 'http://test.com/Issue',
@@ -116,7 +117,7 @@ class CredentialControllerTest(unittest.TestCase):
     #### test route credential/issuingresponse #####
     def test_issuingresponse_returns_true(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, lms_user_id="1", data='{"Test":"Test"}'))
+        Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
         Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
         Setup.SQL_Session.add(CredentialIssuingData(id=1, credential_id="1", agent_id="1", state=1, data='{"Test":"Test"}'))
 
@@ -138,7 +139,7 @@ class CredentialControllerTest(unittest.TestCase):
     #### test route credential/revoke #####
     def test_revoke_returns_true(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, lms_user_id="1", data='{"Test":"Test"}'))
+        Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
         Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
         Setup.SQL_Session.add(CredentialIssuingData(id=1, credential_id="1", agent_id="1", state=1, data='{"Test":"Test"}'))
 

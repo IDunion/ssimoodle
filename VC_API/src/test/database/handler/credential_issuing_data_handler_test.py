@@ -24,7 +24,7 @@ class CredentialIssuingdataHandlerTest(unittest.TestCase):
         res = CredentialIssuingDataHandler.add(cid)
 
         self.assertEqual(res, 1, "Expected 1!")
-        self.assertNotEqual(cid.creationDate, None, "Expected not null")
+        self.assertNotEqual(cid.creation_date, None, "Expected not null")
 
     ##### test methode get #####
     def test_get_return_credential(self):

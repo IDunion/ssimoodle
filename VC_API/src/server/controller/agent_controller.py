@@ -25,7 +25,7 @@ def get_agent():
         properties:
           id: 
             type: integer
-          creationDate:
+          creation_date:
             type: string
           name:
             type: string

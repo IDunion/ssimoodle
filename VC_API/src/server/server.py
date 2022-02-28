@@ -43,7 +43,7 @@ class Server:
         @wraps(f)
         def decorated(*args, **kwargs):
             r = f(*args, **kwargs)
-            if not r:
+            if r == None:
                 return Response("{}", content_type='application/json; charset=utf-8')
 
             if type(r) == list:

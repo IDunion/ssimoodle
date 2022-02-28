@@ -12,7 +12,7 @@ class CredentialIssuingDataHandler():
         Returns:
             int: The id of the CredentialIssuingData
         """
-        credentialIssiungData.creationDate = datetime.now()
+        credentialIssiungData.creation_date = datetime.now()
 
         Setup.SQL_Session.add(credentialIssiungData)
         Setup.SQL_Session.commit()

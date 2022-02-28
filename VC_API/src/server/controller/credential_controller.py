@@ -33,13 +33,13 @@ def get_credential():
         properties:
           id: 
             type: integer
-          creationDate:
+          creation_date:
             type: string
-          lms_user_id:
+          user_id:
             type: string
-          lms_course_id: 
+          course_id: 
             type: string
-          lms_issuer_id:
+          issuer_id:
             type: string
           data: 
             type: string
@@ -55,20 +55,30 @@ def get_credential():
     credential = CredentialHandler.get(id)
     return credential
 
-# Gets all credentials by course id
-@Server.app.route('/credential/getbycourseid', methods=['Get'])
+# Gets all credentials by query
+@Server.app.route('/credential/getlist', methods=['Get'])
 @Server.token_required
 @Server.returns_json
-def getByCourseId_credential():
-    """Returns all stored credentials by course id.
+def getlist_credential():
+    """Returns all stored credentials by query parameters.
     ---
     tags:
       - Credentials
     parameters:
-      - name: courseid
+      - name: course_id
         in: query 
         type: integer
-        required: true
+        required: false
+        default: 1
+      - name: user_id
+        in: query 
+        type: integer
+        required: false
+        default: 1
+      - name: issuer_id
+        in: query 
+        type: integer
+        required: false
         default: 1
     definitions:
       CredentialList:
@@ -83,8 +93,7 @@ def getByCourseId_credential():
         schema:
           $ref: '#/definitions/CredentialList'
     """
-    courseId = request.args["courseid"]
-    credentials = CredentialHandler.getByCourseId(courseId)
+    credentials = CredentialHandler.getlist(request.args)
     return credentials
 
 # Stores a new credential
@@ -143,9 +152,9 @@ def add_credential():
     data = request.json
 
     credential = Credential()
-    credential.lms_user_id = data["UserId"]
-    credential.lms_course_id = data["CourseId"]
-    credential.lms_issuer_id = data["IssuerId"]
+    credential.user_id = data["UserId"]
+    credential.course_id = data["CourseId"]
+    credential.issuer_id = data["IssuerId"]
     credential.data = json.dumps(data["Data"])
 
     id = CredentialHandler.add(credential)

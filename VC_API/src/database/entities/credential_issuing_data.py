@@ -7,7 +7,7 @@ class CredentialIssuingData(Setup.Base):
     __tablename__ = 'CredentialIssuingData'
     
     id = Column(Integer, primary_key=True)
-    creationDate = Column(DateTime, nullable=False)
+    creation_date = Column(DateTime, nullable=False)
     state = Column(Integer, nullable=False)
 
     agent_id = Column(Integer, ForeignKey('Agent.id'))

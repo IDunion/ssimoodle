@@ -12,7 +12,7 @@ class AgentHandler():
         Returns:
             id: The id of the agent
         """
-        agent.creationDate = datetime.now()
+        agent.creation_date = datetime.now()
 
         Setup.SQL_Session.add(agent)
         Setup.SQL_Session.commit()

@@ -8,7 +8,8 @@ class Agent(Setup.Base):
     __tablename__ = 'Agent'
     
     id = Column(Integer, primary_key=True)
-    creationDate = Column(DateTime, nullable=False)
+    creation_date = Column(DateTime, nullable=False)
+    
     name = Column(String(256), nullable=False)
     url = Column(String(256), nullable=False)
     api_token = Column(String(256), nullable=False)

@@ -8,11 +8,11 @@ class Credential(Setup.Base):
     __tablename__ = 'Credential'
     
     id = Column(Integer, primary_key=True)
-    creationDate = Column(DateTime, nullable=False)
+    creation_date = Column(DateTime, nullable=False)
     
-    lms_user_id = Column(String(128), nullable=False)
-    lms_course_id = Column(String(128), nullable=False)
-    lms_issuer_id = Column(String(128), nullable=False)
+    user_id = Column(String(128), nullable=False)
+    course_id = Column(String(128), nullable=False)
+    issuer_id = Column(String(128), nullable=False)
 
     data = Column(String(1024), nullable=True)
 

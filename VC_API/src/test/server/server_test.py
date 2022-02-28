@@ -19,13 +19,13 @@ class ServerTest(unittest.TestCase):
         date = datetime.now() 
         agent = Agent()
         agent.id = "1"
-        agent.creationDate = date
+        agent.creation_date = date
         agent.name="Test"
         agent.url="test"
         agent.api_token="Secret"
         agent.vc_type="VC"
 
-        expection = f'{{"id": "1", "creationDate": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}'
+        expection = f'{{"id": "1", "creation_date": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}'
         res = Server.to_json_str(agent)
         self.assertEqual(res, expection, "Another json was expected!")
 
@@ -33,13 +33,13 @@ class ServerTest(unittest.TestCase):
         date = datetime.now() 
         credential = Credential()
         credential.id = "1"
-        credential.creationDate = date
-        credential.lms_user_id="Test"
-        credential.lms_course_id="test"
-        credential.lms_issuer_id="Issuer"
+        credential.creation_date = date
+        credential.user_id="Test"
+        credential.course_id="test"
+        credential.issuer_id="Issuer"
         credential.data='{"Data":"Test"}'
 
-        expection = f'{{"id": "1", "creationDate": "{date.isoformat()}", "lms_user_id": "Test", "lms_course_id": "test", "lms_issuer_id": "Issuer", "data": "{{\\"Data\\":\\"Test\\"}}"}}'
+        expection = f'{{"id": "1", "creation_date": "{date.isoformat()}", "user_id": "Test", "course_id": "test", "issuer_id": "Issuer", "data": "{{\\"Data\\":\\"Test\\"}}"}}'
         res = Server.to_json_str(credential)
         self.assertEqual(res, expection, "Another json was expected!")
 
@@ -107,7 +107,7 @@ class ServerTest(unittest.TestCase):
             def mock_func():    
                 agent = Agent()
                 agent.id = "1"
-                agent.creationDate = date
+                agent.creation_date = date
                 agent.name="Test"
                 agent.url="test"
                 agent.api_token="Secret"
@@ -118,7 +118,7 @@ class ServerTest(unittest.TestCase):
             f = Server.returns_json(mock_func)
             res = f()
             self.assertEqual(res.status_code, 200, "Status code 200 expected!")
-            self.assertEqual(res.data, bytes(f'{{"id": "1", "creationDate": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}', encoding="utf-8"), "{} expected!")
+            self.assertEqual(res.data, bytes(f'{{"id": "1", "creation_date": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}', encoding="utf-8"), "{} expected!")
 
     def test_returns_json_list(self):
         with Server.app.test_request_context('url', headers={}):
@@ -126,7 +126,7 @@ class ServerTest(unittest.TestCase):
             def mock_func():                
                 agent = Agent()
                 agent.id = "1"
-                agent.creationDate = date
+                agent.creation_date = date
                 agent.name="Test"
                 agent.url="test"
                 agent.api_token="Secret"
@@ -134,7 +134,7 @@ class ServerTest(unittest.TestCase):
                 
                 agent2 = Agent()
                 agent2.id = "2"
-                agent2.creationDate = date
+                agent2.creation_date = date
                 agent2.name="Test2"
                 agent2.url="test2"
                 agent2.api_token="Secret2"
@@ -145,7 +145,7 @@ class ServerTest(unittest.TestCase):
             f = Server.returns_json(mock_func)
             res = f()
             self.assertEqual(res.status_code, 200, "Status code 200 expected!")
-            self.assertEqual(res.data, bytes(f'[{{"id": "1", "creationDate": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}, {{"id": "2", "creationDate": "{date.isoformat()}", "name": "Test2", "url": "test2", "api_token": "Secret2", "vc_type": "VC2"}}]', encoding="utf-8"), "{} expected!")
+            self.assertEqual(res.data, bytes(f'[{{"id": "1", "creation_date": "{date.isoformat()}", "name": "Test", "url": "test", "api_token": "Secret", "vc_type": "VC"}}, {{"id": "2", "creation_date": "{date.isoformat()}", "name": "Test2", "url": "test2", "api_token": "Secret2", "vc_type": "VC2"}}]', encoding="utf-8"), "{} expected!")
 
 if __name__ == '__main__':
     unittest.main()

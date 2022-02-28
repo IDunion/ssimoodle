@@ -24,7 +24,7 @@ class AgentHandlerTest(unittest.TestCase):
         res = AgentHandler.add(agent)
 
         self.assertEqual(res, 1, "Expected 1!")
-        self.assertNotEqual(agent.creationDate, None, "Expected not null")
+        self.assertNotEqual(agent.creation_date, None, "Expected not null")
 
     ##### test methode get #####
     def test_get_return_agent(self):

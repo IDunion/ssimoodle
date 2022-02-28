@@ -12,7 +12,7 @@ class CredentialHandler():
         Returns:
             int: The id of the credential
         """
-        credential.creationDate = datetime.now()
+        credential.creation_date = datetime.now()
 
         Setup.SQL_Session.add(credential)
         Setup.SQL_Session.commit()
@@ -32,16 +32,13 @@ class CredentialHandler():
         """
         return Setup.SQL_Session.query(Credential).filter(Credential.id == id).first()
 
-    def getByCourseId(courseID) -> list:
-        """Returns all credential by the given course id
+    def getlist(query) -> list:
+        """Returns all credential by the given query parameters
 
         Args:
-            courseID (int): The course Id
+            query (Dict): The packed query dictonary
 
         Returns:
             List(Database.Entities.Credential): List of credentials
         """
-        return Setup.SQL_Session.query(Credential).filter(Credential.lms_course_id == courseID).all()
-
-    # def getAll():
-    #     return Setup.SQL_Session.query(Credential).all()
+        return Setup.SQL_Session.query(Credential).filter_by(**query).all()
