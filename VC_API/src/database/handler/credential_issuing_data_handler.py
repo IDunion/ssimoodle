@@ -1,6 +1,8 @@
 from datetime import datetime
+from database.entities.agent import Agent
 from database.entities.credential_issuing_data import CredentialIssuingData
 from database.setup import Setup
+from sqlalchemy.orm import lazyload
 
 class CredentialIssuingDataHandler():
     def add(credentialIssiungData) -> int:
@@ -45,3 +47,14 @@ class CredentialIssuingDataHandler():
         return Setup.SQL_Session.query(CredentialIssuingData).filter(
             CredentialIssuingData.credential_id == credentialId and CredentialIssuingData.agent_id == agentId
             ).first()
+    
+    def getByState(state) -> list:
+        """Returns the credentialIssuingData by the given state
+
+        Args:
+            state (int): The requested state
+
+        Returns:
+            List(Database.Entities.CredentialIssuingData): A list of credentialIssuingData
+        """
+        return Setup.SQL_Session.query(CredentialIssuingData).join(Agent).filter(CredentialIssuingData.state == state.value).all()

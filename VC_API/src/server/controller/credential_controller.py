@@ -3,6 +3,7 @@ import logging
 import requests as http_client
 from flask import request
 import responses
+from global_settings import Settings
 
 from server.server import Server
 from database.entities.credential import Credential
@@ -164,7 +165,6 @@ def add_credential():
 # Issue a credential
 @Server.app.route('/credential/issue', methods=['Post'])
 @Server.token_required
-@responses.activate
 def issue_credential():
     """Starts the issuing process by calling the agent.
     ---
@@ -196,6 +196,11 @@ def issue_credential():
     credential = CredentialHandler.get(id)
     agent = AgentHandler.get(agentId)
 
+    credentialIssiungData = CredentialIssuingDataHandler.getByCredentialAndAgent(id, agentId)
+    if credentialIssiungData:
+      # ToDo: Whats todo if credential already issued
+      return "Already Issued"
+
     # Issuing
     url = agent.url + "/Issue"
     headers = {
@@ -204,7 +209,7 @@ def issue_credential():
     body = json.loads(credential.data)
 
     try:
-        response = http_client.request("POST", url, headers=headers, data=body)
+        response = http_client.request("POST", url, headers=headers, data=body, verify=Settings.agentVerifySSL)
         if response.status_code == 200:
             credentialIssiungData = CredentialIssuingData()
             credentialIssiungData.credential_id = id
@@ -222,63 +227,9 @@ def issue_credential():
         logging.error(ex)
         return "Unexpected exception!", 500
 
-# The issuing response from the agent
-@Server.app.route('/credential/issuingresponse', methods=['Post'])
-@Server.token_required
-@Server.contentType_json
-def issuingresponse_credential():
-    """Response from the agent. Stores the issuing data.
-    ---
-    tags:
-      - Credentials
-    parameters:
-      - name: credentialId
-        in: query 
-        type: integer
-        required: true
-        default: 1
-      - name: agentId
-        in: query 
-        type: integer
-        required: true
-        default: 1
-      - name: body
-        in: body
-        required: true
-        schema:
-          id: response
-          required:
-            - SomeValue
-          properties:
-            SomeValue:
-              type: string
-              description: Some issuing value.
-              default: Some issiung value.
-    security:
-      - APIKeyHeader: ['x-auth-token']
-    responses:
-      200:
-        description: True if successful, otherwise error (500).
-        schema:
-          Response: 
-            bool: string
-    """
-    id = request.args["credentialId"]
-    agentId = request.args["agentId"]
-    
-    data = request.json
-
-    credentialIssiungData = CredentialIssuingDataHandler.getByCredentialAndAgent(id, agentId)
-    credentialIssiungData.state = State.Issued.value
-    credentialIssiungData.data = json.dumps(data)
-    CredentialIssuingDataHandler.update()
-
-    return str(True)
-
 # Revoke a credential
 @Server.app.route('/credential/revoke', methods=['Post'])
 @Server.token_required
-@responses.activate
 def revoke_credential():
     """Starts the revocation process by calling the agent.
     ---
@@ -318,7 +269,7 @@ def revoke_credential():
     body = json.loads(credentialIssuingData.data)
 
     try:
-        response = http_client.request("POST", url, headers=headers, data=body)
+        response = http_client.request("POST", url, headers=headers, data=body, verify=Settings.agentVerifySSL)
         if response.status_code == 200:
             credentialIssuingData.state = State.Revoked.value
             CredentialIssuingDataHandler.update()
@@ -332,3 +283,57 @@ def revoke_credential():
     except Exception as ex:
         logging.error(ex)
         return "Unexpected exception!", 500
+
+if Settings.agentResponseType == "REQUEST":
+    # The issuing response from the agent
+    @Server.app.route('/credential/issuingresponse', methods=['Post'])
+    @Server.token_required
+    @Server.contentType_json
+    def issuingresponse_credential():
+        """Response from the agent. Stores the issuing data.
+        ---
+        tags:
+          - Credentials
+        parameters:
+          - name: credentialId
+            in: query 
+            type: integer
+            required: true
+            default: 1
+          - name: agentId
+            in: query 
+            type: integer
+            required: true
+            default: 1
+          - name: body
+            in: body
+            required: true
+            schema:
+              id: response
+              required:
+                - SomeValue
+              properties:
+                SomeValue:
+                  type: string
+                  description: Some issuing value.
+                  default: Some issiung value.
+        security:
+          - APIKeyHeader: ['x-auth-token']
+        responses:
+          200:
+            description: True if successful, otherwise error (500).
+            schema:
+              Response: 
+                bool: string
+        """
+        id = request.args["credentialId"]
+        agentId = request.args["agentId"]
+        
+        data = request.json
+
+        credentialIssiungData = CredentialIssuingDataHandler.getByCredentialAndAgent(id, agentId)
+        credentialIssiungData.state = State.Issued.value
+        credentialIssiungData.data = json.dumps(data)
+        CredentialIssuingDataHandler.update()
+
+        return str(True)

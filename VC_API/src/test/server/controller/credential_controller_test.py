@@ -11,17 +11,18 @@ import unittest
 from alchemy_mock.mocking import UnifiedAlchemyMagicMock
 import responses
 
-from database.entities.credential import Credential
-from database.entities.agent import Agent
-from database.entities.credential_issuing_data import CredentialIssuingData
+from global_settings import Settings
+from server.server import Server
+from database.setup import Setup
 
+Settings.agentResponseType = "REQUEST"
 
 # import controller
 import server.controller.credential_controller
 
-from global_settings import Settings
-from server.server import Server
-from database.setup import Setup
+from database.entities.credential import Credential
+from database.entities.agent import Agent
+from database.entities.credential_issuing_data import CredentialIssuingData
 
 class CredentialControllerTest(unittest.TestCase):
 
@@ -92,6 +93,7 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(res.status_code, 415, "Expected 405!")
 
     #### test route credential/issue #####
+    @responses.activate
     def test_issue_returns_true(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
         Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
@@ -137,6 +139,7 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(cid.data, '{"Test": "Test"}', "Expected '{\"Test\": \"Test\"}'!")
 
     #### test route credential/revoke #####
+    @responses.activate
     def test_revoke_returns_true(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
         Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
