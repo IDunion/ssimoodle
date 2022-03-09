@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask, Response, request, jsonify
 from flasgger import Swagger
 from functools import wraps
+from database.entities.credential_issuing_data import CredentialIssuingData
 
 from global_settings import Settings
 
@@ -14,6 +15,7 @@ class Server:
         # import controller
         import server.controller.agent_controller
         import server.controller.credential_controller
+        import server.controller.connection_controller
 
         # init swagger
         swagger_template = {"securityDefinitions": {"APIKeyHeader": {"type": "apiKey", "name": "x-auth-token", "in": "header"}}}
@@ -71,9 +73,22 @@ class Server:
     ##### Methods #####
     # json converter for serialization
     def to_json_str(inst):
-        jsonObj = { c.name: getattr(inst, c.name) for c in inst.__table__.columns }
-        lambdaObj = lambda obj: obj.isoformat() if type(obj) == datetime else TypeError
-        return json.dumps(jsonObj, default= lambdaObj)
+        jsonObj = { c: getattr(inst, c) for c in inst.__dict__ }
+        
+        # Delete sqlalchemy field
+        del jsonObj['_sa_instance_state']
+
+        # jsonObj = { c.name: getattr(inst, c.name) for c in inst.__table__.columns }
+        def lambdaFun(obj):
+            if type(obj) == datetime:
+                return obj.isoformat()
+            if type(obj) == CredentialIssuingData:
+                return json.loads(Server.to_json_str(obj))
+            else:
+                return TypeError
+
+        # lambdaObj = lambda obj:  if type(obj) == datetime else TypeError
+        return json.dumps(jsonObj, default=lambdaFun)
 
     ##### Controler #####
     # Simple status controler

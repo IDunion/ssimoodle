@@ -15,7 +15,7 @@ from global_settings import Settings
 from server.server import Server
 from database.setup import Setup
 
-Settings.agentResponseType = "REQUEST"
+# Settings.agentResponseType = "REQUEST"
 
 # import controller
 import server.controller.credential_controller
@@ -117,26 +117,26 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(cid.state, 1, "Expected 1!")
 
     #### test route credential/issuingresponse #####
-    def test_issuingresponse_returns_true(self):
-        Setup.SQL_Session = UnifiedAlchemyMagicMock()
-        Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
-        Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
-        Setup.SQL_Session.add(CredentialIssuingData(id=1, credential_id="1", agent_id="1", state=1, data='{"Test":"Test"}'))
+    # def test_issuingresponse_returns_true(self):
+    #     Setup.SQL_Session = UnifiedAlchemyMagicMock()
+    #     Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
+    #     Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
+    #     Setup.SQL_Session.add(CredentialIssuingData(id=1, credential_id="1", agent_id="1", state=1, data='{"Test":"Test"}'))
 
-        res = Server.app.test_client().post(
-            '/credential/issuingresponse?credentialId=1&agentId=1',
-            data=json.dumps(dict(Test= "Test")),
-            content_type='application/json',
-            headers={'x-auth-token': Settings.authToken}
-        )
+    #     res = Server.app.test_client().post(
+    #         '/credential/issuingresponse?credentialId=1&agentId=1',
+    #         data=json.dumps(dict(Test= "Test")),
+    #         content_type='application/json',
+    #         headers={'x-auth-token': Settings.authToken}
+    #     )
 
-        self.assertEqual(res.status_code, 200, "Expected 200!")
-        self.assertEqual(res.data, b'True', "Expected True!")
+    #     self.assertEqual(res.status_code, 200, "Expected 200!")
+    #     self.assertEqual(res.data, b'True', "Expected True!")
         
-        cid = Setup.SQL_Session.query(CredentialIssuingData).filter(CredentialIssuingData.id == 1).first()
+    #     cid = Setup.SQL_Session.query(CredentialIssuingData).filter(CredentialIssuingData.id == 1).first()
 
-        self.assertEqual(cid.state, 2, "Expected state 2!")
-        self.assertEqual(cid.data, '{"Test": "Test"}', "Expected '{\"Test\": \"Test\"}'!")
+    #     self.assertEqual(cid.state, 2, "Expected state 2!")
+    #     self.assertEqual(cid.data, '{"Test": "Test"}', "Expected '{\"Test\": \"Test\"}'!")
 
     #### test route credential/revoke #####
     @responses.activate

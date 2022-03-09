@@ -16,4 +16,4 @@ class Credential(Setup.Base):
 
     data = Column(String(1024), nullable=True)
 
-    credential_data = relationship(CredentialIssuingData.__tablename__)
+    credential_data = relationship(CredentialIssuingData.__tablename__, lazy='joined')

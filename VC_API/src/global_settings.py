@@ -13,6 +13,7 @@ class Settings:
     authToken = GetEnvVarOrDefault("X-AUTH-TOKEN", "SecretToken")
     databasePath = GetEnvVarOrDefault("DATABASE_PATH", "src/database")
 
-    agentResponseType = GetEnvVarOrDefault("AGENT_RESPONSE_TYPE", "POLLING") # POLLING/REQUEST
-    agentPollingIntervall = GetEnvVarOrDefault("AGENT_POLLING_INTERVALL", "60") # In seconds
-    agentVerifySSL = GetEnvVarOrDefault("AGENT_POLLING_INTERVALL", "False") == "True" # True/False
+    agentVerifySSL = GetEnvVarOrDefault("AGENT_VERIFY_SSL_INTERVALL", "False") == "True" # True/False
+
+    # agentResponseType = GetEnvVarOrDefault("AGENT_RESPONSE_TYPE", "POLLING") # POLLING/REQUEST
+    # agentPollingIntervall = GetEnvVarOrDefault("AGENT_POLLING_INTERVALL", "60") # In seconds

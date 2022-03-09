@@ -57,4 +57,4 @@ class CredentialIssuingDataHandler():
         Returns:
             List(Database.Entities.CredentialIssuingData): A list of credentialIssuingData
         """
-        return Setup.SQL_Session.query(CredentialIssuingData).join(Agent).filter(CredentialIssuingData.state == state.value).all()
+        return Setup.SQL_Session.query(CredentialIssuingData, Agent).filter(Agent.id == CredentialIssuingData.agent_id).filter(CredentialIssuingData.state == state.value).all()

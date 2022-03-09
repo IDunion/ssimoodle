@@ -20,7 +20,7 @@ class CredentialHandler():
 
     def update():
         Setup.SQL_Session.commit()
-    
+
     def get(id) -> Credential:
         """Gets a credential by id
         

@@ -10,6 +10,8 @@ class CredentialIssuingData(Setup.Base):
     creation_date = Column(DateTime, nullable=False)
     state = Column(Integer, nullable=False)
 
+    issuing_ui = Column(String(1024), nullable=True)
+
     agent_id = Column(Integer, ForeignKey('Agent.id'))
     credential_id = Column(Integer, ForeignKey('Credential.id'))
 
