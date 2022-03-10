@@ -14,6 +14,3 @@ class Settings:
     databasePath = GetEnvVarOrDefault("DATABASE_PATH", "src/database")
 
     agentVerifySSL = GetEnvVarOrDefault("AGENT_VERIFY_SSL_INTERVALL", "False") == "True" # True/False
-
-    # agentResponseType = GetEnvVarOrDefault("AGENT_RESPONSE_TYPE", "POLLING") # POLLING/REQUEST
-    # agentPollingIntervall = GetEnvVarOrDefault("AGENT_POLLING_INTERVALL", "60") # In seconds

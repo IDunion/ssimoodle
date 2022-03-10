@@ -15,14 +15,12 @@ from global_settings import Settings
 from server.server import Server
 from database.setup import Setup
 
-# Settings.agentResponseType = "REQUEST"
-
 # import controller
 import server.controller.credential_controller
 
 from database.entities.credential import Credential
 from database.entities.agent import Agent
-from database.entities.credential_issuing_data import CredentialIssuingData
+from database.entities.credential_issuing_data import CredentialIssuingData, State
 
 class CredentialControllerTest(unittest.TestCase):
 
@@ -50,7 +48,7 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(res.status_code, 200, "Expected 200!")
         self.assertEqual(json.loads(res.data.decode("utf-8"))["user_id"], "1", "Expected  {}!")
 
-    ##### test route agent/getlist #####
+    ##### test route credential/getlist #####
     def test_getbycourseid_returns_credentialList(self):
         query = {'course_id' : '1'}
         Setup.SQL_Session = UnifiedAlchemyMagicMock(data=[
@@ -68,7 +66,7 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(res.status_code, 200, "Expected 200!")
         self.assertEqual(len(json.loads(res.data.decode("utf-8"))), 2, "Expected 2 credentials!")
 
-    #### test route agent/add #####
+    #### test route credential/add #####
     def test_add_agent_returns_ok(self):
         Setup.SQL_Session = UnifiedAlchemyMagicMock()
 
@@ -100,7 +98,7 @@ class CredentialControllerTest(unittest.TestCase):
         Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
 
         responses.add(responses.POST, 'http://test.com/Issue',
-                  json={'Test': 'Test'}, status=200)
+                  body="", status=200)
 
         res = Server.app.test_client().post(
             '/credential/issue?credentialId=1&agentId=1',
@@ -116,27 +114,23 @@ class CredentialControllerTest(unittest.TestCase):
         self.assertEqual(cid.agent_id, '1', "Expected 1!")
         self.assertEqual(cid.state, 1, "Expected 1!")
 
-    #### test route credential/issuingresponse #####
-    # def test_issuingresponse_returns_true(self):
-    #     Setup.SQL_Session = UnifiedAlchemyMagicMock()
-    #     Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
-    #     Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
-    #     Setup.SQL_Session.add(CredentialIssuingData(id=1, credential_id="1", agent_id="1", state=1, data='{"Test":"Test"}'))
+    @responses.activate
+    def test_issue_returns_500_Already_Issued(self):
+        Setup.SQL_Session = UnifiedAlchemyMagicMock()
+        Setup.SQL_Session.add(Credential(id=1, user_id="1", data='{"Test":"Test"}'))
+        Setup.SQL_Session.add(Agent(id=1, name="Test1", api_token="Token", url="http://test.com"))
+        Setup.SQL_Session.add(CredentialIssuingData(id=1, state = State.Issuing.value))
 
-    #     res = Server.app.test_client().post(
-    #         '/credential/issuingresponse?credentialId=1&agentId=1',
-    #         data=json.dumps(dict(Test= "Test")),
-    #         content_type='application/json',
-    #         headers={'x-auth-token': Settings.authToken}
-    #     )
+        responses.add(responses.POST, 'http://test.com/Issue',
+                  body="", status=200)
 
-    #     self.assertEqual(res.status_code, 200, "Expected 200!")
-    #     self.assertEqual(res.data, b'True', "Expected True!")
-        
-    #     cid = Setup.SQL_Session.query(CredentialIssuingData).filter(CredentialIssuingData.id == 1).first()
+        res = Server.app.test_client().post(
+            '/credential/issue?credentialId=1&agentId=1',
+            headers={'x-auth-token': Settings.authToken}
+        )
 
-    #     self.assertEqual(cid.state, 2, "Expected state 2!")
-    #     self.assertEqual(cid.data, '{"Test": "Test"}', "Expected '{\"Test\": \"Test\"}'!")
+        self.assertEqual(res.status_code, 200, "Expected 200!")
+        self.assertEqual(res.data, b'Already Issued', "Expected 'Already Issued'!")
 
     #### test route credential/revoke #####
     @responses.activate
